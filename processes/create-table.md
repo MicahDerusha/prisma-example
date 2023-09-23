@@ -1,17 +1,15 @@
-
-
-# CREATING A NEW TABLE
+CREATING A NEW TABLE
 
 ** AFTER CREATING A NEW TABLE YOU MUST CREATE AN AUDIT TABLE AND RUN ALL DB TESTS **
 
-## Every table must have:
+# Every table must have:
 
 - [ ] `ID String @id @default(nanoid(10))`
 - [ ] `createdAt DateTime @default(now())`
 - [ ] `updatedAt DateTime @updatedAt`
 - [ ] `deletedAt DateTime?`
 
-### Example
+# Example
 
 ```
 model Example {
@@ -29,7 +27,15 @@ model Example {
 }
 ```
 
-## For all new enums:
+# Decide if the table should be hard-deleted
+
+Relationship tables should be hard deleted
+so that we can easily re-create the relationship when need be.
+If the table should be hard-deleted:
+
+- [ ] Add table name to `hard_delete_models` in db\prisma\middleware\softDelete\ignoreDeletedInUpdateMiddleware.ts
+
+# For all new enums: (OPENPITCH INTERNAL USE ONLY)
 
 in db/prisma/schemas/ :
 
@@ -40,7 +46,7 @@ in db/prisma/schemas/ :
       in app\src\components\admin\tables\database-tables\actions\update-row.tsx :
 - [ ] add the new options
 
-## Create audit table
+# Create audit table
 
 - [ ] copy the original model
 - [ ] remove all @id
@@ -55,7 +61,7 @@ in db/prisma/schemas/ :
 - [ ] add col: `Action AuditAction`
 - [ ] add col: `auditCreatedAt DateTime @default(now())`
 
-### Example
+# Example
 
 ```
 model Example_Audit {
@@ -75,20 +81,10 @@ model Example_Audit {
 }
 ```
 
-## Update zod schemas
+# Update zod schemas: (OPENPITCH INTERNAL USE ONLY)
 
 - [ ] un-comment the zod generator in db/schema.prisma
 - [ ] run `db-generate`
 - [ ] discard changes to existing schemas (except index)
 - [ ] replace all `z.nativeEnum()` with the schema in db/prisma/schemas/
-- [ ] comment the zod generator
-
-## Decide if the table should be hard-deleted
-
-Relationship tables should be hard deleted
-so that we can easily re-create the relationship when need be.
-If the table should be hard-deleted:
-
-- [ ] Add table name to `hard_delete_models` in db\prisma\middleware\softDelete\ignoreDeletedInUpdateMiddleware.ts
-
-
+- [ ] re-comment the zod generator

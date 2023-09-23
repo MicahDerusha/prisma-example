@@ -1,4 +1,4 @@
-# MODIFYING A TABLE
+MODIFYING A TABLE
 
 Follow the action-specific instructions below and then:
 
@@ -6,21 +6,17 @@ Follow the action-specific instructions below and then:
 - [ ] discard changes to the other models that you arent modifying
 - [ ] Revert any unexpected changes to your model (Only keep changes related to the change you are making)
 
-## removing a col
+# removing a col
 
 - [ ] make col optional in the audit table
 
-## renaming a col
-
-- [ ] rename the col in the audit table
-- [ ] also follow instructions in the RENAMING A COL section
-
-## adding a col
+# adding a col
 
 - [ ] add the col in the audit table, make optional
 
-# RENAMING A COL
+# renaming a col
 
+- [ ] rename the col in the audit table
 - [ ] create the migration
 - [ ] copy the snippet below into the migration
 - [ ] replace `Sent_Push_Notification` -> `YOUR_TABLE_NAME`
@@ -28,7 +24,8 @@ Follow the action-specific instructions below and then:
 - [ ] replace `Push_ID` -> `old_name`
 - [ ] replace `VARCHAR(191)` -> `actual_type`
 
-## SNIPPET:
+
+# SNIPPET:
 
 ```
 -- Sent_Push_Notification
