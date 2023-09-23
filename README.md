@@ -9,7 +9,7 @@ This repository is a collection of opinionated processes and middlewares that yo
 # Philosophy
 First, do no harm. 
 We started with the current prisma middleware examples in the official docs and made them better.
-All middlewares are production-tested and being actively used by OpenPitch.com
+All middlewares are production-tested and being actively used by OpenPitch.com.
 No maintenance necesssary, after changing the schema, just run `prisma generate`
 
 # Soft delete middleware
