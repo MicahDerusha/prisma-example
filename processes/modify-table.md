@@ -1,11 +1,5 @@
 MODIFYING A TABLE
 
-(OPENPITCH INTERNAL USE ONLY) Follow the action-specific instructions below and then:
-
-- [ ] un-comment the zod generator and run db-generate
-- [ ] discard changes to the other models that you arent modifying
-- [ ] Revert any unexpected changes to your model (Only keep changes related to the change you are making)
-
 # removing a col
 
 - [ ] make col optional in the audit table
