@@ -19,7 +19,7 @@ MODIFYING A TABLE
 - [ ] replace `VARCHAR(191)` -> `actual_type`
 
 
-# SNIPPET:
+## SNIPPET:
 
 ```
 -- Sent_Push_Notification
