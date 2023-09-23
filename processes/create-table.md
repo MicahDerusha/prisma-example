@@ -35,17 +35,6 @@ If the table should be hard-deleted:
 
 - [ ] Add table name to `hard_delete_models` in db\prisma\middleware\softDelete\ignoreDeletedInUpdateMiddleware.ts
 
-# For all new enums: (OPENPITCH INTERNAL USE ONLY)
-
-in db/prisma/schemas/ :
-
-- [ ] create a `uniquefieldliteral` schema
-- [ ] create a `options` array
-      in app\src\components\shared\form\Form.tsx :
-- [ ] add the new schema to the mapping
-      in app\src\components\admin\tables\database-tables\actions\update-row.tsx :
-- [ ] add the new options
-
 # Create audit table
 
 - [ ] copy the original model
@@ -80,11 +69,3 @@ model Example_Audit {
     auditCreatedAt DateTime @default(now())
 }
 ```
-
-# Update zod schemas: (OPENPITCH INTERNAL USE ONLY)
-
-- [ ] un-comment the zod generator in db/schema.prisma
-- [ ] run `db-generate`
-- [ ] discard changes to existing schemas (except index)
-- [ ] replace all `z.nativeEnum()` with the schema in db/prisma/schemas/
-- [ ] re-comment the zod generator
