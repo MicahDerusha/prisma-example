@@ -1,6 +1,6 @@
 MODIFYING A TABLE
 
-Follow the action-specific instructions below and then:
+(OPENPITCH INTERNAL USE ONLY) Follow the action-specific instructions below and then:
 
 - [ ] un-comment the zod generator and run db-generate
 - [ ] discard changes to the other models that you arent modifying

@@ -38,6 +38,7 @@ If the table should be hard-deleted:
 # Create audit table
 
 - [ ] copy the original model
+- [ ] name the audit model `${ORIGINAL_MODEL_NAME}_Audit`
 - [ ] remove all @id
 - [ ] remove all @unique and @@unique
 - [ ] remove all @default
