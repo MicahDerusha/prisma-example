@@ -1,0 +1,31 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+
+  /**** NPM SCRIPT CONFIG *******************************************/
+  // only show root package.json in explorer
+  "npm.exclude": ["**/apps/**", "**/packages/**"],
+  // filter scripts in explorer
+  "npm.scriptExplorerExclude": [
+    "format",
+    "lint",
+    "clean",
+    "start",
+    "db-generate",
+    "db-push",
+    "db-seed",
+    "db-migrate",
+    "test:unit",
+    "test:integration"
+  ],
+
+  /**** PRETTIER CONFIG *********************************************/
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[css]": {
+    "editor.formatOnSave": false
+  },
+  "prettier.printWidth": 80,
+  "prettier.singleQuote": false,
+  "prettier.trailingComma": "es5",
+  "editor.rulers": [{ "column": 80, "color": "#ffcc0022" }]
+}

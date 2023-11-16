@@ -32,7 +32,10 @@ generator client {
 
 datasource db {
     provider = "mysql"
-    url      = env("DATABASE_URL")
+    // url      = env("DATABASE_URL")
+    url      = "mysql://root:admin@localhost:3306/prisma_example"
+    // provider = "sqlite"
+    // url      = "file:./prisma-example.db"
 }
 
 
@@ -52,6 +55,7 @@ model User {
     deletedAt DateTime? 
     
     //Relations
+    Hear_About_Us Hear_About_Us[]
 }
 
 model User_Audit {
@@ -74,9 +78,53 @@ model User_Audit {
     auditCreatedAt DateTime @default(now())
 }
 
+
+model Hear_About_Us {
+    @@unique([User_ID, HearAboutUs])
+    //Dimensions
+    ID String @id @default(nanoid(10)) 
+    User_ID String
+
+    //Facts
+    HearAboutUs HearAboutUs
+
+    //Metadata
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    deletedAt DateTime? 
+    
+    //Relations
+    User User @relation(fields: [User_ID], references: [ID])
+}
+
+
+model Hear_About_Us_Audit {
+    Audit_ID String @id @default(nanoid(15)) 
+    Action AuditAction 
+    //Dimensions
+    ID String
+    User_ID String
+
+    //Facts
+    HearAboutUs String
+
+    //Metadata
+    createdAt DateTime
+    updatedAt DateTime
+    deletedAt DateTime? 
+    
+    //Relations
+}
+
 enum AuditAction {
     CREATE
     UPDATE
     UPSERT
     DELETE
+}
+
+enum HearAboutUs {
+    LinkedIn
+    Friend
+    Twitter
 }

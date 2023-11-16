@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": false,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "noUncheckedIndexedAccess": true
+    // "baseUrl": "."
+    // "paths": {
+    //   "@/*": ["./*"],
+    //   "tests/*": ["./__tests__/*"]
+    // }
+  },
+  "include": ["src", "__tests__", "index.ts"],
+  "exclude": ["node_modules"]
+}
