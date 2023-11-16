@@ -1,7 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { Dimension_Date } from "@prisma/client";
-import { getDateString } from "@investii/utils/src/utils/dateUtils";
-import { recursiveFilterDeletedRecords } from "../../../../prisma/middleware/softDelete/filterDeletedRecordsMiddleware";
+import { recursiveFilterDeletedRecords } from "../../../src/middleware/softDelete/filterDeletedRecordsMiddleware";
 
 describe("recursiveFilterDeletedRecords", () => {
   test("filters items from array", () => {
