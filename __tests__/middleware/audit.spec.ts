@@ -1,17 +1,29 @@
-import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  test,
+} from "@jest/globals";
 import { PrismaClient, Prisma, AuditAction, User_Audit } from "@prisma/client";
-import { createAuditLog } from "../../../prisma/middleware/audit";
-import test_company_a from "../../../prisma/seed/Companies/test_company_a";
+import { createAuditLog } from "../../src/middleware/audit";
 
 const prisma = new PrismaClient();
 prisma.$use(createAuditLog);
 const prismaHardDelete = new PrismaClient();
 
 describe("audit", () => {
+  beforeEach(() => {});
+  afterEach(async () => {
+    await prismaHardDelete.user.deleteMany();
+    await prismaHardDelete.user_Audit.deleteMany();
+  });
   test("create", async () => {
     const ID = "new";
     const data = await prisma.user.create({
-      data: { ID, Email: "new" },
+      data: { ID, Email: "new", Password: "pass" },
     });
     const { Audit_ID, auditCreatedAt, ...result } =
       (await prismaHardDelete.user_Audit.findFirst({
@@ -19,14 +31,12 @@ describe("audit", () => {
       })) as User_Audit;
 
     const expected = Object.assign(data, { Action: AuditAction.CREATE });
-    await prismaHardDelete.user.delete({ where: { ID } });
-    await prismaHardDelete.user_Audit.deleteMany({ where: { ID } });
     expect(expected).toStrictEqual(result);
   });
   test("update", async () => {
     const ID = "new";
     await prismaHardDelete.user.create({
-      data: { ID, Email: "old" },
+      data: { ID, Email: "old", Password: "pass" },
     });
     const data = await prisma.user.update({
       where: { ID },
@@ -38,15 +48,13 @@ describe("audit", () => {
       })) as User_Audit;
 
     const expected = Object.assign(data, { Action: AuditAction.UPDATE });
-    await prismaHardDelete.user.delete({ where: { ID } });
-    await prismaHardDelete.user_Audit.deleteMany({ where: { ID } });
     expect(expected).toStrictEqual(result);
   });
   test("upsert", async () => {
     const ID = "new";
     const data = await prisma.user.upsert({
       where: { ID },
-      create: { ID, Email: "new" },
+      create: { ID, Email: "new", Password: "pass" },
       update: { ID, Email: "new" },
     });
     const { Audit_ID, auditCreatedAt, ...result } =
@@ -55,14 +63,12 @@ describe("audit", () => {
       })) as User_Audit;
 
     const expected = Object.assign(data, { Action: AuditAction.UPSERT });
-    await prismaHardDelete.user.delete({ where: { ID } });
-    await prismaHardDelete.user_Audit.deleteMany({ where: { ID } });
     expect(expected).toStrictEqual(result);
   });
   test("delete", async () => {
     const ID = "new";
     const data = await prismaHardDelete.user.create({
-      data: { ID, Email: "new" },
+      data: { ID, Email: "new", Password: "pass" },
     });
     await prisma.user.delete({
       where: { ID },
@@ -73,8 +79,6 @@ describe("audit", () => {
       })) as User_Audit;
 
     const expected = Object.assign(data, { Action: AuditAction.DELETE });
-    // await prismaHardDelete.user.delete({ where: { ID } }); //already deleted
-    await prismaHardDelete.user_Audit.deleteMany({ where: { ID } });
     expect(expected).toStrictEqual(result);
   });
   test("updateMany", async () => {
@@ -82,11 +86,16 @@ describe("audit", () => {
     const ID2 = "old";
     //ignore updatedAt
     const { updatedAt: e, ...data } = await prismaHardDelete.user.create({
-      data: { ID, Email: "new", First_Name: "test123456" },
+      data: { ID, Email: "new", First_Name: "test123456", Password: "pass" },
     });
     //ignore updatedAt
     const { updatedAt: f, ...data2 } = await prismaHardDelete.user.create({
-      data: { ID: ID2, Email: "old", First_Name: "test123456" },
+      data: {
+        ID: ID2,
+        Email: "old",
+        First_Name: "test123456",
+        Password: "pass",
+      },
     });
     await prisma.user.updateMany({
       where: { First_Name: "test123456" },
@@ -119,12 +128,6 @@ describe("audit", () => {
       Action: AuditAction.UPDATE,
       First_Name: "newtestusername",
     });
-    await prismaHardDelete.user.deleteMany({
-      where: { ID: { in: [ID, ID2] } },
-    });
-    await prismaHardDelete.user_Audit.deleteMany({
-      where: { ID: { in: [ID, ID2] } },
-    });
     expect(expected).toStrictEqual(result);
     expect(expected2).toStrictEqual(result2);
   });
@@ -132,14 +135,17 @@ describe("audit", () => {
     const ID = "new";
     const ID2 = "old";
     const data = await prismaHardDelete.user.create({
-      data: { ID, Email: "new", First_Name: "test123456" },
+      data: { ID, Email: "new", First_Name: "test123456", Password: "pass" },
     });
     const data2 = await prismaHardDelete.user.create({
-      data: { ID: ID2, Email: "old", First_Name: "test123456" },
+      data: {
+        ID: ID2,
+        Email: "old",
+        First_Name: "test123456",
+        Password: "pass",
+      },
     });
-    await prisma.user.deleteMany({
-      where: { First_Name: "test123456" },
-    });
+    await prisma.user.deleteMany({});
     const {
       Audit_ID: a,
       auditCreatedAt: b,
@@ -157,12 +163,6 @@ describe("audit", () => {
     });
     const expected2 = Object.assign(data2, {
       Action: AuditAction.DELETE,
-    });
-    // await prismaHardDelete.user.deleteMany({
-    //   where: { ID: { in: [ID, ID2] } },
-    // });//already deleted
-    await prismaHardDelete.user_Audit.deleteMany({
-      where: { ID: { in: [ID, ID2] } },
     });
     expect(expected).toStrictEqual(result);
     expect(expected2).toStrictEqual(result2);
