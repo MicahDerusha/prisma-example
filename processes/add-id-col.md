@@ -1,4 +1,4 @@
-ADDING A PK ID COL TO A TABLE
+ADDING A PRIMARY KEY ID COLUMN TO A TABLE
 
 - [ ] add this col to the table: `ID String? @default(nanoid(10))`
 - [ ] add this col to the audit table: `ID String?`
