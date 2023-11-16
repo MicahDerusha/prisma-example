@@ -1,7 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { Dimension_Date } from "@prisma/client";
-import { getDateString } from "@investii/utils/src/utils/dateUtils";
-import { recursiveAddDeletedAt } from "../../../../prisma/middleware/softDelete/addDeletedAtToWhere";
+import { recursiveAddDeletedAt } from "../../../src/middleware/softDelete/addDeletedAtToWhere";
 
 describe("recursiveAddDeletedAt", () => {
   test("undefined", () => {
@@ -22,28 +20,27 @@ describe("recursiveAddDeletedAt", () => {
   test("kitchen sink", () => {
     const testDate = new Date();
     const where = recursiveAddDeletedAt({
-      Account: { Name: "abcd", Company: { Name: "abcd company" } },
+      Hear_About_Us: { Name: "abcd", User: { Name: "abcd company" } },
       User: {
         some: {
           Name: "abcd2",
-          Company: { Name: "abcd2 company" },
+          Hear_About_Us: { HearAboutUs: "Twitter" },
           createdAt: { gte: testDate },
         },
       },
     });
-
     expect(where.deletedAt).toBe(null);
 
-    expect(where.Account.deletedAt).toBe(null);
-    expect(where.Account.Name).toBe("abcd");
-    expect(where.Account.Company.deletedAt).toBe(null);
-    expect(where.Account.Company.Name).toBe("abcd company");
+    expect(where.Hear_About_Us.deletedAt).toBe(null);
+    expect(where.Hear_About_Us.Name).toBe("abcd");
+    expect(where.Hear_About_Us.User.deletedAt).toBe(null);
+    expect(where.Hear_About_Us.User.Name).toBe("abcd company");
 
     expect(where.User.deletedAt).toBe(undefined);
     expect(where.User.some.deletedAt).toBe(null);
     expect(where.User.some.Name).toBe("abcd2");
-    expect(where.User.some.Company.deletedAt).toBe(null);
-    expect(where.User.some.Company.Name).toBe("abcd2 company");
+    expect(where.User.some.Hear_About_Us.deletedAt).toBe(null);
+    expect(where.User.some.Hear_About_Us.HearAboutUs).toBe("Twitter");
     expect(where.User.some.createdAt.deletedAt).toBe(undefined);
     expect(where.User.some.createdAt.gte).toStrictEqual(testDate);
   });
