@@ -1,13 +1,13 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import { addDeletedAtNullToUpsertMiddleware } from "./middleware/softDelete/addDeletedAtNullToUpsertMiddleware";
-import { filterDeletedRecordsMiddleware } from "./middleware/softDelete/filterDeletedRecordsMiddleware";
-import { setDeletedAtInsteadOfDeletingMiddleware } from "./middleware/softDelete/setDeletedAtInsteadOfDeletingMiddleware";
-import { ignoreDeletedInUpdateMiddleware } from "./middleware/softDelete/ignoreDeletedInUpdateMiddleware";
-import { ignoreDeletedInFindMiddleware } from "./middleware/softDelete/ignoreDeletedInFindMiddleware";
-import { ignoreDeletedInAggregateMiddleware } from "./middleware/softDelete/ignoreDeletedInAggregateMiddleware";
-import { ignoreDeletedInCountMiddleware } from "./middleware/softDelete/ignoreDeletedInCountMiddleware";
-import { ignoreDeletedInGroupByMiddleware } from "./middleware/softDelete/ignoreDeletedInGroupByMiddleware";
-import { createAuditLog } from "./middleware/audit";
+import { addDeletedAtNullToUpsertMiddleware } from "./src/middleware/softDelete/addDeletedAtNullToUpsertMiddleware";
+import { filterDeletedRecordsMiddleware } from "./src/middleware/softDelete/filterDeletedRecordsMiddleware";
+import { setDeletedAtInsteadOfDeletingMiddleware } from "./src/middleware/softDelete/setDeletedAtInsteadOfDeletingMiddleware";
+import { ignoreDeletedInUpdateMiddleware } from "./src/middleware/softDelete/ignoreDeletedInUpdateMiddleware";
+import { ignoreDeletedInFindMiddleware } from "./src/middleware/softDelete/ignoreDeletedInFindMiddleware";
+import { ignoreDeletedInAggregateMiddleware } from "./src/middleware/softDelete/ignoreDeletedInAggregateMiddleware";
+import { ignoreDeletedInCountMiddleware } from "./src/middleware/softDelete/ignoreDeletedInCountMiddleware";
+import { ignoreDeletedInGroupByMiddleware } from "./src/middleware/softDelete/ignoreDeletedInGroupByMiddleware";
+import { createAuditLog } from "./src/middleware/audit";
 
 declare global {
   // allow global `var` declarations
@@ -16,7 +16,7 @@ declare global {
 }
 
 export const prisma =
-//   global.prisma ||
+  //   global.prisma ||
   new PrismaClient({
     log:
       process.env.NODE_ENV === "local"

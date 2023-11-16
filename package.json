@@ -2,7 +2,8 @@
   "name": "@openpitch/prisma-example",
   "version": "1.0.0",
   "description": "Collection of prisma processes and middlewares",
-  "main": "index.js",
+  "main": "./index.ts",
+  "types": "./index.ts",
   "scripts": {
     "test": "jest --runInBand",
     "clean": "rm -rf node_modules",

@@ -14,12 +14,13 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "noUncheckedIndexedAccess": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "noUncheckedIndexedAccess": true
+    // "baseUrl": "."
+    // "paths": {
+    //   "@/*": ["./*"],
+    //   "tests/*": ["./__tests__/*"]
+    // }
   },
-  "include": ["src", "__tests__"],
+  "include": ["src", "__tests__", "index.ts"],
   "exclude": ["node_modules"]
 }
