@@ -1,119 +1,94 @@
-import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  test,
+} from "@jest/globals";
 import { PrismaClient } from "@prisma/client";
-import { ignoreDeletedInUpdateMiddleware } from "../../../../prisma/middleware/softDelete/ignoreDeletedInUpdateMiddleware";
-import test_company_a from "../../../../prisma/seed/Companies/test_company_a";
+import { ignoreDeletedInUpdateMiddleware } from "../../../src/middleware/softDelete/ignoreDeletedInUpdateMiddleware";
 
 const prisma = new PrismaClient();
 prisma.$use(ignoreDeletedInUpdateMiddleware); //on update: adds 'where deletedAt is null' to all queries and recursively to joins)
 
 describe("ignoreDeletedInUpdateMiddleware", () => {
   describe("works for composite key tables", () => {
-    test("update works with active records", async () => {
-      await prisma.company_DEI_Gender.create({
-        data: { Gender: "Female", Company_ID: test_company_a.company.ID },
+    const now = new Date();
+    beforeEach(async () => {
+      await prisma.user.create({
+        data: { Email: "new_user", ID: "new_user", Password: "pass" },
       });
-      const result = await prisma.company_DEI_Gender.update({
+      await prisma.hear_About_Us.create({
+        data: { HearAboutUs: "Friend", User_ID: "new_user" },
+      });
+      await prisma.hear_About_Us.create({
+        data: {
+          HearAboutUs: "LinkedIn",
+          User_ID: "new_user",
+          deletedAt: now,
+        },
+      });
+    });
+    afterEach(async () => {
+      await prisma.hear_About_Us.deleteMany({});
+      await prisma.user.deleteMany({});
+    });
+    test("update works with active records", async () => {
+      const result = await prisma.hear_About_Us.update({
         where: {
-          Company_ID_Gender: {
-            Gender: "Female",
-            Company_ID: test_company_a.company.ID,
+          User_ID_HearAboutUs: {
+            HearAboutUs: "Friend",
+            User_ID: "new_user",
           },
         },
-        data: { Gender: "Male" },
+        data: { HearAboutUs: "Twitter" },
       });
-      await prisma.company_DEI_Gender.deleteMany({
-        where: {
-          Company_ID: test_company_a.company.ID,
-        },
-      });
-      expect(result.Gender).toBe("Male");
+      expect(result.HearAboutUs).toBe("Twitter");
     });
     test("update does not work on deleted records", async () => {
-      await prisma.company_DEI_Gender.create({
-        data: {
-          Gender: "Female",
-          Company_ID: test_company_a.company.ID,
-          deletedAt: new Date(),
-        },
-      });
       await expect(
-        prisma.company_DEI_Gender.update({
+        prisma.hear_About_Us.update({
           where: {
-            Company_ID_Gender: {
-              Gender: "Female",
-              Company_ID: test_company_a.company.ID,
+            User_ID_HearAboutUs: {
+              HearAboutUs: "LinkedIn",
+              User_ID: "new_user",
             },
           },
-          data: { Gender: "Male" },
+          data: { HearAboutUs: "Twitter" },
         })
       ).rejects.toThrow();
-      await prisma.company_DEI_Gender.deleteMany({
-        where: {
-          Company_ID: test_company_a.company.ID,
-        },
-      });
     });
     test("updateMany works with active records", async () => {
-      await prisma.company_DEI_Gender.create({
-        data: { Gender: "Female", Company_ID: test_company_a.company.ID },
-      });
-      await prisma.company_DEI_Gender.create({
-        data: { Gender: "Male", Company_ID: test_company_a.company.ID },
-      });
-      const now = new Date();
-      await prisma.company_DEI_Gender.updateMany({
+      await prisma.hear_About_Us.updateMany({
         where: {
-          Company_ID: test_company_a.company.ID,
+          User_ID: "new_user",
         },
         data: { createdAt: now },
       });
-      const result = await prisma.company_DEI_Gender.findMany({
+      const result = await prisma.hear_About_Us.findMany({
         where: {
-          Company_ID: test_company_a.company.ID,
+          createdAt: now,
         },
       });
-      await prisma.company_DEI_Gender.deleteMany({
-        where: {
-          Company_ID: test_company_a.company.ID,
-        },
-      });
-      expect(result.at(0)?.createdAt).toStrictEqual(now);
-      expect(result.at(1)?.createdAt).toStrictEqual(now);
+      expect(result.length).toBe(1);
+      expect(result.at(0)?.HearAboutUs).toBe("Friend");
     });
     test("updateMany does not work on deleted records", async () => {
-      const deletedAt = new Date();
-      await prisma.company_DEI_Gender.create({
-        data: {
-          Gender: "Female",
-          Company_ID: test_company_a.company.ID,
-          deletedAt,
-        },
-      });
-      await prisma.company_DEI_Gender.create({
-        data: {
-          Gender: "Male",
-          Company_ID: test_company_a.company.ID,
-          deletedAt,
-        },
-      });
-      await prisma.company_DEI_Gender.updateMany({
+      await prisma.hear_About_Us.updateMany({
         where: {
-          Company_ID: test_company_a.company.ID,
+          HearAboutUs: "LinkedIn",
         },
         data: { deletedAt: null },
       });
-      const result = await prisma.company_DEI_Gender.findMany({
+      const result = await prisma.hear_About_Us.findMany({
         where: {
-          Company_ID: test_company_a.company.ID,
+          HearAboutUs: "LinkedIn",
         },
       });
-      await prisma.company_DEI_Gender.deleteMany({
-        where: {
-          Company_ID: test_company_a.company.ID,
-        },
-      });
-      expect(result.at(0)?.deletedAt).toStrictEqual(deletedAt);
-      expect(result.at(1)?.deletedAt).toStrictEqual(deletedAt);
+      expect(result.length).toBe(1);
+      expect(result.at(0)?.deletedAt).toStrictEqual(now);
     });
   });
 });
