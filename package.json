@@ -4,7 +4,10 @@
   "description": "Collection of prisma processes and middlewares",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand",
+    "clean": "rm -rf node_modules",
+    "clean:windows": "rmdir node_modules /s /q",
+    "push": "prisma db push",
     "generate": "prisma generate"
   },
   "author": "",
