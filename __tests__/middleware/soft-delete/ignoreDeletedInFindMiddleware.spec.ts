@@ -1,7 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
 import { PrismaClient } from "@prisma/client";
-import { ignoreDeletedInFindMiddleware } from "../../../../prisma/middleware/softDelete/ignoreDeletedInFindMiddleware";
-import test_company_a from "../../../../prisma/seed/Companies/test_company_a";
+import { ignoreDeletedInFindMiddleware } from "../../../src/middleware/softDelete/ignoreDeletedInFindMiddleware";
 
 const prisma = new PrismaClient();
 prisma.$use(ignoreDeletedInFindMiddleware); //on find: adds 'where deletedAt is null' to all queries and recursively to joins
@@ -9,119 +8,119 @@ prisma.$use(ignoreDeletedInFindMiddleware); //on find: adds 'where deletedAt is 
 describe("ignoreDeletedInFindMiddleware", () => {
   describe("works for composite key tables", () => {
     beforeAll(async () => {
-      await prisma.company_DEI_Gender.create({
-        data: { Gender: "Female", Company_ID: test_company_a.company.ID },
-      });
-      await prisma.company_DEI_Gender.create({
+      const user = await prisma.user.create({
         data: {
-          Gender: "Male",
-          Company_ID: test_company_a.company.ID,
+          ID: "test 3",
+          Email: "abc@example.com",
+          Password: "pass",
+          First_Name: "name",
+        },
+      });
+      await prisma.hear_About_Us.create({
+        data: { HearAboutUs: "Friend", User_ID: "test 3" },
+      });
+      await prisma.hear_About_Us.create({
+        data: {
+          HearAboutUs: "LinkedIn",
+          User_ID: "test 3",
           deletedAt: new Date(),
         },
       });
     });
     afterAll(async () => {
-      await prisma.company_DEI_Gender.deleteMany({
-        where: {
-          Company_ID: test_company_a.company.ID,
-        },
-      });
+      await prisma.hear_About_Us.deleteMany({});
+      await prisma.user.deleteMany({});
     });
     test("findFirst returns active records", async () => {
-      const result = await prisma.company_DEI_Gender.findFirst({
+      const result = await prisma.hear_About_Us.findFirst({
         where: {
-          Gender: "Female",
-          Company_ID: test_company_a.company.ID,
+          HearAboutUs: "Friend",
         },
       });
-      expect(result?.Gender).toBe("Female");
+      expect(result?.HearAboutUs).toBe("Friend");
     });
     test("findFirst does not return deleted records", async () => {
-      const result = await prisma.company_DEI_Gender.findFirst({
+      const result = await prisma.hear_About_Us.findFirst({
         where: {
-          Gender: "Male",
-          Company_ID: test_company_a.company.ID,
+          HearAboutUs: "LinkedIn",
         },
       });
       expect(result).toBe(null);
     });
     test("findFirstOrThrow returns active records", async () => {
-      const result = await prisma.company_DEI_Gender.findFirstOrThrow({
+      const result = await prisma.hear_About_Us.findFirstOrThrow({
         where: {
-          Gender: "Female",
-          Company_ID: test_company_a.company.ID,
+          HearAboutUs: "Friend",
         },
       });
-      expect(result?.Gender).toBe("Female");
+      expect(result?.HearAboutUs).toBe("Friend");
     });
     test("findFirstOrThrow does not return deleted records", async () => {
       await expect(
-        prisma.company_DEI_Gender.findFirstOrThrow({
+        prisma.hear_About_Us.findFirstOrThrow({
           where: {
-            Gender: "Male",
-            Company_ID: test_company_a.company.ID,
+            HearAboutUs: "LinkedIn",
           },
         })
       ).rejects.toThrow();
     });
     test("findMany returns active records", async () => {
-      const result = await prisma.company_DEI_Gender.findMany({
+      const result = await prisma.hear_About_Us.findMany({
         where: {
-          Gender: "Female",
-          Company_ID: test_company_a.company.ID,
+          HearAboutUs: "Friend",
         },
       });
-      expect(result[0]?.Gender).toBe("Female");
+      expect(result.length).toBe(1);
+      expect(result[0]?.HearAboutUs).toBe("Friend");
     });
     test("findMany does not return deleted records", async () => {
-      const result = await prisma.company_DEI_Gender.findMany({
+      const result = await prisma.hear_About_Us.findMany({
         where: {
-          Gender: "Male",
-          Company_ID: test_company_a.company.ID,
+          HearAboutUs: "LinkedIn",
         },
       });
       expect(result.length).toBe(0);
     });
     test("findUnique returns active records", async () => {
-      const result = await prisma.company_DEI_Gender.findUnique({
+      const result = await prisma.hear_About_Us.findUnique({
         where: {
-          Company_ID_Gender: {
-            Gender: "Female",
-            Company_ID: test_company_a.company.ID,
+          User_ID_HearAboutUs: {
+            HearAboutUs: "Friend",
+            User_ID: "test 3",
           },
         },
       });
-      expect(result?.Gender).toBe("Female");
+      expect(result?.HearAboutUs).toBe("Friend");
     });
     test("findUnique does not return deleted records", async () => {
-      const result = await prisma.company_DEI_Gender.findUnique({
+      const result = await prisma.hear_About_Us.findUnique({
         where: {
-          Company_ID_Gender: {
-            Gender: "Male",
-            Company_ID: test_company_a.company.ID,
+          User_ID_HearAboutUs: {
+            HearAboutUs: "LinkedIn",
+            User_ID: "test 3",
           },
         },
       });
       expect(result).toBe(null);
     });
     test("findUniqueOrThrow returns active records", async () => {
-      const result = await prisma.company_DEI_Gender.findUniqueOrThrow({
+      const result = await prisma.hear_About_Us.findUniqueOrThrow({
         where: {
-          Company_ID_Gender: {
-            Gender: "Female",
-            Company_ID: test_company_a.company.ID,
+          User_ID_HearAboutUs: {
+            HearAboutUs: "Friend",
+            User_ID: "test 3",
           },
         },
       });
-      expect(result?.Gender).toBe("Female");
+      expect(result?.HearAboutUs).toBe("Friend");
     });
     test("findUniqueOrThrow does not return deleted records", async () => {
       await expect(
-        prisma.company_DEI_Gender.findUniqueOrThrow({
+        prisma.hear_About_Us.findUniqueOrThrow({
           where: {
-            Company_ID_Gender: {
-              Gender: "Male",
-              Company_ID: test_company_a.company.ID,
+            User_ID_HearAboutUs: {
+              HearAboutUs: "LinkedIn",
+              User_ID: "test 3",
             },
           },
         })
@@ -129,21 +128,28 @@ describe("ignoreDeletedInFindMiddleware", () => {
     });
   });
   describe("works for non-composite key tables", () => {
+    const today = new Date();
     beforeAll(async () => {
       await prisma.user.create({
-        data: { Email: "active", ID: "active" },
+        data: {
+          ID: "active",
+          Email: "active",
+          Password: "pass",
+          First_Name: "name",
+        },
       });
       await prisma.user.create({
-        data: { Email: "deleted", ID: "deleted", deletedAt: new Date() },
+        data: {
+          ID: "deleted",
+          Email: "deleted",
+          Password: "pass",
+          First_Name: "name",
+          deletedAt: today,
+        },
       });
     });
     afterAll(async () => {
-      await prisma.user.delete({
-        where: { ID: "active" },
-      });
-      await prisma.user.delete({
-        where: { ID: "deleted" },
-      });
+      await prisma.user.deleteMany({});
     });
     test("findFirst returns active records", async () => {
       const result = await prisma.user.findFirst({
