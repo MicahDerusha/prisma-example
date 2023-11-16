@@ -1,7 +1,6 @@
 import { describe, expect, test, afterEach } from "@jest/globals";
 import { PrismaClient } from "@prisma/client";
-import { getDateString } from "@investii/utils/src/utils/dateUtils";
-import { addDeletedAtNullToUpsertMiddleware } from "../../../../prisma/middleware/softDelete/addDeletedAtNullToUpsertMiddleware";
+import { addDeletedAtNullToUpsertMiddleware } from "../../../src/middleware/softDelete/addDeletedAtNullToUpsertMiddleware";
 
 const prisma = new PrismaClient();
 prisma.$use(addDeletedAtNullToUpsertMiddleware);
@@ -11,6 +10,7 @@ describe("addDeletedAtNullToUpsertMiddleware", () => {
     describe("w/ deletedAt specified", () => {
       const data = {
         Email: "asdafasf",
+        Password: "ABC123",
         ID: "new id asdas",
       };
       afterEach(async () => {
@@ -41,6 +41,7 @@ describe("addDeletedAtNullToUpsertMiddleware", () => {
     describe("w/ deletedAt un-specified", () => {
       const data = {
         Email: "asdafasf",
+        Password: "ABC123",
         ID: "new id asdas",
       };
       afterEach(async () => {
@@ -63,6 +64,7 @@ describe("addDeletedAtNullToUpsertMiddleware", () => {
     describe("w/ deletedAt specified", () => {
       const data = {
         Email: "asdafasf",
+        Password: "ABC123",
         ID: "new id asdas",
       };
       afterEach(async () => {
@@ -99,6 +101,7 @@ describe("addDeletedAtNullToUpsertMiddleware", () => {
     describe("w/ deletedAt un-specified", () => {
       const data = {
         Email: "asdafasf",
+        Password: "ABC123",
         ID: "new id asdas",
       };
       afterEach(async () => {
