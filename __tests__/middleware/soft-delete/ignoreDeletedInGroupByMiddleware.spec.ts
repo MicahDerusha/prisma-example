@@ -1,61 +1,71 @@
 import { afterAll, beforeAll, describe, expect, test } from "@jest/globals";
 import { PrismaClient } from "@prisma/client";
-import { ignoreDeletedInGroupByMiddleware } from "../../../../prisma/middleware/softDelete/ignoreDeletedInGroupByMiddleware";
-import test_company_a from "../../../../prisma/seed/Companies/test_company_a";
-import path from "path";
-import fsPromises from "fs/promises";
+import { ignoreDeletedInGroupByMiddleware } from "../../../src/middleware/softDelete/ignoreDeletedInGroupByMiddleware";
 
 const prisma = new PrismaClient();
 prisma.$use(ignoreDeletedInGroupByMiddleware); //on find: adds 'where deletedAt is null' to all queries and recursively to joins
 
 describe("ignoreDeletedInGroupByMiddleware", () => {
-  test("returns active records", async () => {
-    await prisma.company_DEI_Gender.create({
-      data: { Gender: "Female", Company_ID: test_company_a.company.ID },
-    });
-    await prisma.company_DEI_Gender.create({
-      data: { Gender: "Male", Company_ID: test_company_a.company.ID },
-    });
-    const result = await prisma.company_DEI_Gender.groupBy({
-      where: {
-        Company_ID: test_company_a.company.ID,
-      },
-      by: ["Gender"],
-    });
-    await prisma.company_DEI_Gender.deleteMany({
-      where: {
-        Company_ID: test_company_a.company.ID,
+  const today = new Date();
+  beforeAll(async () => {
+    await prisma.user.create({
+      data: {
+        ID: "test active",
+        Email: "test@example.com",
+        Password: "pass",
+        First_Name: "user",
       },
     });
-    expect(result.length).toBe(2);
-    expect(result.at(0)?.Gender).toBe("Male");
-    expect(result.at(1)?.Gender).toBe("Female");
+    await prisma.user.create({
+      data: {
+        ID: "test deleted",
+        Email: "deleted@example.com",
+        Password: "pass",
+        First_Name: "user",
+        deletedAt: today,
+      },
+    });
   });
-  test("does not return deleted records", async () => {
-    await prisma.company_DEI_Gender.create({
-      data: {
-        Gender: "Female",
-        Company_ID: test_company_a.company.ID,
+  afterAll(async () => {
+    await prisma.user.deleteMany();
+  });
+  test("with where includes active only", async () => {
+    const result = await prisma.user.groupBy({
+      where: {
+        First_Name: "user",
+      },
+      by: ["First_Name"],
+      _count: true,
+    });
+    expect(result.length).toBe(1);
+    expect(result[0]?._count).toBe(1);
+  });
+  test("no where includes active only", async () => {
+    const result = await prisma.user.groupBy({
+      by: ["First_Name"],
+      _count: true,
+    });
+    expect(result.length).toBe(1);
+    expect(result[0]?._count).toBe(1);
+  });
+  test("can override soft delete filter", async () => {
+    const result = await prisma.user.groupBy({
+      where: {
+        deletedAt: today,
+      },
+      by: ["First_Name"],
+      _count: true,
+    });
+    expect(result.length).toBe(1);
+    expect(result[0]?._count).toBe(1);
+  });
+  test("overriding soft delete filter was not a false positive", async () => {
+    const result = await prisma.user.groupBy({
+      where: {
         deletedAt: new Date(),
       },
-    });
-    await prisma.company_DEI_Gender.create({
-      data: {
-        Gender: "Male",
-        Company_ID: test_company_a.company.ID,
-        deletedAt: new Date(),
-      },
-    });
-    const result = await prisma.company_DEI_Gender.groupBy({
-      where: {
-        Company_ID: test_company_a.company.ID,
-      },
-      by: ["Gender"],
-    });
-    await prisma.company_DEI_Gender.deleteMany({
-      where: {
-        Company_ID: test_company_a.company.ID,
-      },
+      by: ["First_Name"],
+      _count: true,
     });
     expect(result.length).toBe(0);
   });
