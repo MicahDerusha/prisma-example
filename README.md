@@ -14,7 +14,7 @@ We started with the current prisma middleware examples in the official docs and 
 All middlewares are production-tested and being actively used by OpenPitch.com.
 No maintenance necesssary, after changing the schema, just run `prisma generate`
 
-# Soft delete middleware
+# [Soft delete middleware](https://github.com/OpenPitch/prisma-example/blob/main/guides/soft-delete.md)
 
 Improvements:
 
