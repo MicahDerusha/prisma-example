@@ -25,7 +25,7 @@ Improvements:
 5. Recursively filter any and all nested models
 6. Conditionally return deleted records
 
-# Audit middleware
+# [Audit middleware](guides/audit.md)
 
 Why you should use audit tables:
 
