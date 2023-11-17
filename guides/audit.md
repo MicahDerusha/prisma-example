@@ -14,7 +14,7 @@
 
 ## Maintenance
 
-- Every table must have an audit table, unless it is not being audited.
+- Every table must have an audit table, unless it is not being audited. [How to create an audit table](../processes/create-table.md)
 - In order to disable auditing on a table, add the table name to `TablesWithoutAudit` in `audit.ts`
 
 ## What is an audit table?
@@ -27,4 +27,4 @@ Using audit tables, we can track every single change to ever happen in the db.
 
 ### When to use audit tables
 
-By default, every table should be audited.
+By default, every table should be audited. If a table is extremely unimportant, and your schema.prisma has many files, you can omit an audit table to keep bundle size down. This will also help speed up the typescript compiler in vscode.

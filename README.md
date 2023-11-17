@@ -40,25 +40,33 @@ Benefits:
 1. Access your db directly from within your nextjs app
 2. Keep a record of all actions
 
-# TRPC Mutation logger
+# How to modify your schema
 
-Log all state changing operations to a table. This way, you can easily replicate state and behavior when debugging.
-
-# How to add ID col to existing table
-
-If every table has an ID col, it becomes easier to add quality of life features to your prisma integration.
+A collection of step by step processes in order to update your schema while keeping it compatible with all of the utilities in this repo.
 
 # How to use migrations to perform complex data migration
 
 Learn how to use prisma migration files to handle most data migrations automatically with zero down-time.
 
-## How to rename a col
-
-By default, renaming a column in schema.prisma drops the old column and creates a new one, losing all of your data. See the easiest way to rename a column in prisma without data loss.
-
 # Migrate database on push using github workflows
 
 Never deploy a migration by hand again!
+
+# Migration guide
+
+Step by step guide to get your prisma schema up to snuff.
+
+# How to rename a col
+
+By default, renaming a column in schema.prisma drops the old column and creates a new one, losing all of your data. See the easiest way to rename a column in prisma without data loss.
+
+# How to add ID col to existing table
+
+If every table has an ID col, it becomes easier to add quality of life features to your prisma integration.
+
+# TRPC Mutation logger
+
+Log all state changing operations to a table. This way, you can easily replicate state and behavior when debugging.
 
 # How to control error msg on backend with global onError handler
 
