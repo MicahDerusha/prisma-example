@@ -40,7 +40,7 @@ Benefits:
 1. Access your db directly from within your nextjs app
 2. Keep a record of all actions
 
-# How to modify your schema
+# [How to modify your schema](guides/modify-schema.md)
 
 A collection of step by step processes in order to update your schema while keeping it compatible with all of the utilities in this repo.
 
