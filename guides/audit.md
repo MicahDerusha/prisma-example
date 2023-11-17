@@ -14,7 +14,7 @@
 
 ## Maintenance
 
-- Every table must have an audit table, unless it is not being audited. [How to create an audit table](../processes/create-table.md)
+- Every table must have an audit table, unless it is not being audited. [Create an audit table](../processes/create-table.md#create-audit-table)
 - In order to disable auditing on a table, add the table name to `TablesWithoutAudit` in `audit.ts`
 
 ## What is an audit table?
