@@ -14,9 +14,7 @@ We started with the current prisma middleware examples in the official docs and 
 All middlewares are production-tested and being actively used by OpenPitch.com.
 No maintenance necesssary, after changing the schema, just run `prisma generate`
 
-# Table of Contents
-
-## Soft delete middleware
+# Soft delete middleware
 
 Improvements:
 
@@ -27,7 +25,7 @@ Improvements:
 5. Recursively filter any and all nested models
 6. Conditionally return deleted records
 
-## Audit middleware
+# Audit middleware
 
 Why you should use audit tables:
 
@@ -35,49 +33,49 @@ Why you should use audit tables:
 2. Every value that was ever written to the database is recorded
 3. All data is easily-restorable
 
-## CMS Generator
+# CMS Generator
 
 Benefits:
 
-1. Let admins have access to the database while keeping a record of their actions
-2. Let admins access the db directly within your app
+1. Access your db directly from within your nextjs app
+2. Keep a record of all actions
 
-## TRPC Mutation logger
+# TRPC Mutation logger
 
 Log all state changing operations to a table. This way, you can easily replicate state and behavior when debugging.
 
-## How to add ID col to existing table
+# How to add ID col to existing table
 
 If every table has an ID col, it becomes easier to add quality of life features to your prisma integration.
 
-## How to use migrations to perform complex data migration
+# How to use migrations to perform complex data migration
 
 Learn how to use prisma migration files to handle most data migrations automatically with zero down-time.
 
-### How to rename a col
+## How to rename a col
 
 By default, renaming a column in schema.prisma drops the old column and creates a new one, losing all of your data. See the easiest way to rename a column in prisma without data loss.
 
-## Migrate database on push using github workflows
+# Migrate database on push using github workflows
 
 Never deploy a migration by hand again!
 
-## How to control error msg on backend with global onError handler
+# How to control error msg on backend with global onError handler
 
 No need to define an onError function in every single one of your tRPC client calls. Handle it in a central location on the frontend so error messages are completely controlled by the backend.
 
-## How to log all errors to your logger
+# How to log all errors to your logger
 
 No need to manually log every backend error to your log server by hand. Handle it once on the backend so that all errors get sent automatically to your logger.
 
-## How to have an express backend hosted on aws elastic beanstalk
+# How to have an express backend hosted on aws elastic beanstalk
 
 Use a serverless frontend with an express backend for the perfect stack!
 
-### Deploy to beanstalk on push using github workflows
+## Deploy to beanstalk on push using github workflows
 
 Automatically update the backend on push along with the frontend and db for the perfect ci/cd pipeline.
 
-### How to get nextAuth working with express and sockets
+## How to get nextAuth working with express and sockets
 
 Learn how to make the best OSS auth library even better!
