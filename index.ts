@@ -28,7 +28,8 @@ if (process.env.NODE_ENV !== "production") {
   global.prisma = prisma;
 }
 
-///////// soft delete middlewares need to be first /////////
+//soft delete section needs to be first
+///////// SOFT DELETE SECTION /////////
 prisma.$use(setDeletedAtInsteadOfDeletingMiddleware); //this should be first soft-delete middleware
 prisma.$use(ignoreDeletedInFindMiddleware);
 prisma.$use(ignoreDeletedInUpdateMiddleware);
@@ -43,7 +44,7 @@ prisma.$use(ignoreDeletedInCountMiddleware);
 prisma.$use(ignoreDeletedInGroupByMiddleware);
 prisma.$use(addDeletedAtNullToUpsertMiddleware);
 prisma.$use(filterDeletedRecordsMiddleware); //this should be last soft-delete middleware
-///////// end of soft delete middlewares /////////
+///////// END SOFT DELETE SECTION /////////
 
 ///////// audit needs to be last /////////
 prisma.$use(createAuditLog);
