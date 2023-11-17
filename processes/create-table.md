@@ -27,14 +27,6 @@ model Example {
 }
 ```
 
-# Decide if the table should be hard-deleted
-
-Relationship tables should be hard deleted
-so that we can easily re-create the relationship when need be.
-If the table should be hard-deleted:
-
-- [ ] Add table name to `hard_delete_models` in db\prisma\middleware\softDelete\ignoreDeletedInUpdateMiddleware.ts
-
 # Create audit table
 
 Creating an audit table
@@ -72,6 +64,14 @@ model Example_Audit {
     auditCreatedAt DateTime @default(now())
 }
 ```
+
+# Decide if the table should be hard-deleted
+
+Relationship tables should be hard deleted
+so that we can easily re-create the relationship when need be.
+If the table should be hard-deleted:
+
+- [ ] Add table name to `hard_delete_models` in db\prisma\middleware\softDelete\ignoreDeletedInUpdateMiddleware.ts
 
 # For all new enums: (CMS USERS ONLY)
 
