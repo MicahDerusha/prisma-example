@@ -1,8 +1,18 @@
 import { Prisma, PrismaClient, AuditAction } from "@prisma/client";
-import { ExcludeUnionKeys, IncludeUnionKeys, LowercaseFirstCharacter, excludeObjectKeys,  } from "../types";
+import {
+  ExcludeUnionKeys,
+  IncludeUnionKeys,
+  LowercaseFirstCharacter,
+  excludeObjectKeys,
+} from "../types";
 import { lowercaseFirstLetter } from "../utils";
 
 const prisma = new PrismaClient();
+
+//add table names that dont have an audit table here
+const TablesWithoutAudit: DataModelNames[] = [
+  // "Hear_About_Us",
+];
 
 export type DataModelNames = ExcludeUnionKeys<Prisma.ModelName, "_Audit">;
 export type AuditModelNames = IncludeUnionKeys<Prisma.ModelName, "_Audit">;
@@ -64,6 +74,11 @@ export async function createAuditLog(
 
   if (model.includes("_Audit")) {
     throw "cant create audit directly";
+  }
+
+  //skip tables that dont have an audit table
+  if (TablesWithoutAudit.includes(model as DataModelNames)) {
+    return next(params);
   }
 
   //only create audits for these tables

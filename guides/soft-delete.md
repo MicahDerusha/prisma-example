@@ -9,7 +9,7 @@
 ## Installation
 
 1. Copy the entire softDelete folder in src/middleware/ into your project.
-2. Copy the entire soft-delete section in index.ts intp your top-level exported prisma client (the soft delete middlewares should come before all other middlewares)
+2. Copy the entire soft-delete section in index.ts into your top-level exported prisma client (the soft delete middlewares should come before all other middlewares)
 3. Take a look at the maintenance section, so you know how to keep things working
 
 ## Maintenance

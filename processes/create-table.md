@@ -37,6 +37,8 @@ If the table should be hard-deleted:
 
 # Create audit table
 
+Creating an audit table
+
 - [ ] copy the original model
 - [ ] name the audit model `${ORIGINAL_MODEL_NAME}_Audit`
 - [ ] remove all @id
@@ -51,7 +53,7 @@ If the table should be hard-deleted:
 - [ ] add col: `Action AuditAction`
 - [ ] add col: `auditCreatedAt DateTime @default(now())`
 
-# Example
+## Example
 
 ```
 model Example_Audit {
@@ -70,3 +72,22 @@ model Example_Audit {
     auditCreatedAt DateTime @default(now())
 }
 ```
+
+# For all new enums: (CMS USERS ONLY)
+
+in db/prisma/schemas/ :
+
+- [ ] create a `uniquefieldliteral` schema
+- [ ] create a `options` array
+      in app\src\components\shared\form\Form.tsx :
+- [ ] add the new schema to the mapping
+      in app\src\components\admin\tables\database-tables\actions\update-row.tsx :
+- [ ] add the new options
+
+# Update zod schemas: (CMS USERS ONLY)
+
+- [ ] un-comment the zod generator in db/schema.prisma
+- [ ] run `db-generate`
+- [ ] discard changes to existing schemas (except index)
+- [ ] replace all `z.nativeEnum()` with the schema in db/prisma/schemas/
+- [ ] re-comment the zod generator
